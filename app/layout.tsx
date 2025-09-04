@@ -4,6 +4,8 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Suspense } from "react"
 import "./globals.css"
+import ReduxProvider from "@/components/providers/redux-provider"
+import AppProvider from "@/components/providers/app-provider"
 
 export const metadata: Metadata = {
   title: "Budget ERP - Financial Management System",
@@ -19,7 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        <ReduxProvider>
+          <AppProvider>
+            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+          </AppProvider>
+        </ReduxProvider>
       </body>
     </html>
   )

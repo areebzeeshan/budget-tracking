@@ -9,15 +9,15 @@ import StatementPreview from "../../components/statements/statement-preview"
 import StatementHistory from "../../components/statements/statement-history"
 import { Button } from "../../components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
+import { useSelector } from "react-redux"
 
 export default function StatementsPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [showPreview, setShowPreview] = useState(false)
   const { user, isAuthenticated } = useAuth()
-  const { state } = useAppContext()
-  const { transactions, expenses } = state.transaction
-  const { currentAccount, savingsAccount } = state.account
+  const { transactions, expenses } = useSelector(state => state.transaction)
+  const { currentAccount, savingsAccount } = useSelector(state => state.account)
 
   // Generate statement data
   const statementData = useMemo(() => {
