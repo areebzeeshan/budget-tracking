@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 import { Button } from "../ui/button"
 import { LayoutDashboard, Wallet, Receipt, TrendingUp, FileText, Settings, LogOut, Menu, X } from "lucide-react"
 
@@ -14,20 +16,21 @@ const navigation = [
   { name: "Settings", href: "/settings", icon: Settings, current: false },
 ]
 
-export default function Sidebar({ onLogout }) {
+export default function Sidebar({ user, onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const pathname = usePathname()
 
-  const handleLogout = () => {
-    localStorage.removeItem("demo-auth")
-    localStorage.removeItem("demo-user")
-    onLogout()
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    try {
+      onLogout()
+    } catch (error) {
+      console.error('Error during logout:', error)
+    }
   }
 
   const isCurrentPage = (href) => {
-    if (typeof window !== "undefined") {
-      return window.location.pathname === href
-    }
-    return false
+    return pathname === href
   }
 
   return (
@@ -73,8 +76,14 @@ export default function Sidebar({ onLogout }) {
             })}
           </nav>
 
-          {/* Logout button */}
+          {/* User info and Logout */}
           <div className="p-4 border-t border-sidebar-border">
+            {user && (
+              <div className="mb-4 px-3 py-2 text-sm text-sidebar-foreground/80">
+                <p className="font-medium">{user.displayName}</p>
+                <p className="text-xs text-sidebar-foreground/60 truncate">{user.email}</p>
+              </div>
+            )}
             <Button
               onClick={handleLogout}
               variant="outline"
